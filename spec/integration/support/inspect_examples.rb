@@ -19,7 +19,7 @@ shared_examples "inspect" do |bases|
   bases.each do |base|
     describe "inspect #{base} system" do
       before(:all) do
-        @subject_system = start_system(box: base)
+        @subject_system = start_system(box: base, provider: "docker")
         prepare_machinery_for_host(@machinery, @subject_system.ip, password: "vagrant")
       end
 

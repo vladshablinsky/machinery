@@ -1,16 +1,13 @@
-# Services [192.168.122.238] (2014-05-21 17:00:14)
+# Services [] ()
 
-  * YaST2-Firstboot.service: enabled
-  * YaST2-Second-Stage.service: enabled
   * after-local.service: static
-  * autofs.service: enabled
-  * autoyast-initscripts.service: disabled
+  * autofs.service: disabled
   * blk-availability.service: disabled
   * cgroup.service: masked
   * cleanup.service: static
   * clock.service: masked
   * console-getty.service: disabled
-  * console-shell.service: disabled
+  * console-shell.service: static
   * cron.service: enabled
   * crypto-early.service: masked
   * crypto.service: masked
@@ -43,7 +40,6 @@
   * lvm2-lvmetad.service: disabled
   * lvm2-lvmetad.socket: disabled
   * lvm2-monitor.service: disabled
-  * multipathd.service: disabled
   * network.service: enabled
   * polkit.service: static
   * proc.service: masked
@@ -53,11 +49,11 @@
   * rc-local.service: static
   * rescue.service: static
   * rootfsck.service: static
-  * rpcbind.service: enabled
-  * rpcbind.socket: enabled
+  * rpcbind.service: disabled
+  * rpcbind.socket: disabled
   * rsyncd.service: disabled
   * single.service: masked
-  * sshd.service: enabled
+  * sshd.service: disabled
   * startpreload.service: masked
   * stoppreload.service: masked
   * swap.service: masked
@@ -109,4 +105,3 @@
   * systemd-user-sessions.service: static
   * systemd-vconsole-setup.service: static
   * udev.service: static
-

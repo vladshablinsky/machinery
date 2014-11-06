@@ -21,7 +21,15 @@ def inject_test_data(base)
     # add NIS placeholder to users/groups
     echo "+::::::" >> /etc/passwd
     echo "+:::" >> /etc/group
+  EOF
 
+  base.vm.provision "shell", inline: prepare_test_environment_script
+  base.vm.provision "shell",
+    inline: "cd /; tar xf /vagrant/unmanaged_files.tgz"
+end
+
+def setup_network_mounts
+  prepare_test_environment_script = <<-EOF
     # enable NFS and autofs server for remote file system filtering tests
     mkdir -p "/remote-dir/"
     mkdir -p "/mnt/unmanaged/remote-dir/"
@@ -30,12 +38,12 @@ def inject_test_data(base)
     echo "/remote-dir   /etc/auto.remote_dir" >> /etc/auto.master
     echo "server -fstype=nfs 127.0.0.1:/tmp" >> /etc/auto.remote_dir
     if [ -x /bin/systemd ]; then
-      systemctl enable rpcbind.service
-      systemctl enable nfsserver.service
-      systemctl enable autofs.service
-      systemctl restart rpcbind.service
-      systemctl restart nfsserver.service
-      systemctl restart autofs.service
+    systemctl enable rpcbind.service
+    systemctl enable nfsserver.service
+    systemctl enable autofs.service
+    systemctl restart rpcbind.service
+    systemctl restart nfsserver.service
+    systemctl restart autofs.service
     else
       /sbin/chkconfig rpcbind on
       /sbin/chkconfig nfsserver on
@@ -46,21 +54,17 @@ def inject_test_data(base)
     fi
     mount -t nfs 127.0.0.1:/tmp "/mnt/unmanaged/remote-dir/"
   EOF
-
   base.vm.provision "shell", inline: prepare_test_environment_script
-  base.vm.provision "shell",
-    inline: "cd /; tar xf /vagrant/unmanaged_files.tgz"
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define :opensuse131 do |opensuse131|
-    opensuse131.vm.box = "base_opensuse13.1_kvm"
-
-    opensuse131.vm.provider :libvirt do |domain|
-      domain.memory = 1024
-      domain.cpus = 1
-      domain.nested = false
-      domain.volume_cache = 'none'
+    opensuse131.vm.provider :docker do |domain|
+      domain.build_dir = "../docker_images/base_opensuse13.1"
+      domain.create_args = ["-t"]
+      domain.cmd = ["/usr/sbin/sshd", "-D"]
+      domain.name = "vagrant_opensuse13.1"
+      domain.has_ssh = true
     end
 
     inject_test_data(opensuse131)
