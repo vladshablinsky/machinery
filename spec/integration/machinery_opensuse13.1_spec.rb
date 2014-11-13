@@ -19,7 +19,7 @@ require_relative "integration_spec_helper"
 
 describe "machinery@openSUSE 13.1" do
   before(:all) do
-    @machinery = start_system(box: "machinery_131")
+    @machinery = start_system(box: "machinery_131", provider: "docker")
   end
 
   include_examples "CLI"
