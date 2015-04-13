@@ -679,6 +679,25 @@ class Cli
     end
   end
 
+  desc "Mount filesystem of a system description"
+  long_desc <<-LONGDESC
+    Mount filesystem of a system description.
+  LONGDESC
+  arg "NAME"
+  arg "MOUNT_POINT"
+  command "mount" do |c|
+    c.action do |global_options,options,args|
+      name = shift_arg(args, "NAME")
+      mount_point = shift_arg(args, "MOUNT_POINT")
+
+      description = SystemDescription.load(name, system_description_store)
+      task = MountTask.new
+      task.mount(description, mount_point)
+    end
+  end
+
+
+
   def self.system_description_store
     if ENV.has_key?("MACHINERY_DIR")
       SystemDescriptionStore.new(ENV["MACHINERY_DIR"])
