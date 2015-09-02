@@ -25,7 +25,10 @@ class UsersInspector < Inspector
 
   def inspect(_filter, _options = {})
     passwd = @system.read_file("/etc/passwd")
-    shadow = @system.read_file("/etc/shadow")
+    begin
+      shadow = @system.read_file("/etc/shadow")
+    rescue
+    end
 
     users = passwd ? parse_users(passwd, shadow) : []
 
