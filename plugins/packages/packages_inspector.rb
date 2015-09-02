@@ -26,9 +26,10 @@ class PackagesInspector < Inspector
     @system.check_requirement("rpm", "--version")
 
     packages = Array.new
+    # Skip checksums for now, because RPM doesn't support MD5 checksums on AIX 5.3
     rpm_data = @system.run_command(
       "rpm","-qa","--qf",
-      "%{NAME}|%{VERSION}|%{RELEASE}|%{ARCH}|%{VENDOR}|%{SIGMD5}$",
+      "%{NAME}|%{VERSION}|%{RELEASE}|%{ARCH}|%{VENDOR}$",
       :stdout=>:capture
     )
     # gpg-pubkeys are no real packages but listed by rpm in the regular
@@ -42,7 +43,7 @@ class PackagesInspector < Inspector
         :release  => release,
         :arch     => arch,
         :vendor   => vendor,
-        :checksum => checksum
+        :checksum => "0"
       )
     end
 
