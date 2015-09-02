@@ -87,7 +87,7 @@ class System
   end
 
   def has_command?(command)
-    run_command("bash", "-c", "type -P #{command}", stdout: :capture)
+    run_command("type", "-P", "#{command}", stdout: :capture)
     true
   rescue Cheetah::ExecutionFailed
     false
