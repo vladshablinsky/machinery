@@ -28,6 +28,7 @@ import (
 	"unicode/utf8"
 )
 
+// Parses an output line from the rpm command.
 func ParseRpmLine(line string) (fileType string, fileName string, linkTarget string) {
 	fileType = line[0:1]
 
@@ -46,6 +47,7 @@ func ParseRpmLine(line string) (fileType string, fileName string, linkTarget str
 	return
 }
 
+// Returns a list of rpms handled by the system.
 func GetRpms() []string {
 	cmd := exec.Command("rpm", "-qlav")
 	var out bytes.Buffer
@@ -62,6 +64,7 @@ func GetRpms() []string {
 	return packages
 }
 
+// Appends implicit managed dirs to a map.
 func AddImplicitlyManagedDirs(dirs map[string]bool, files map[string]string) {
 	for file, target := range files {
 		for i := 1; i < len(file); i++ {
@@ -82,12 +85,14 @@ func AddImplicitlyManagedDirs(dirs map[string]bool, files map[string]string) {
 	return
 }
 
+// Builds a json from a map of files.
 func AssembleJSON(unmanagedFilesMap interface{}) string {
 	jsonMap := map[string]interface{}{"extracted": false, "files": unmanagedFilesMap}
 	json, _ := json.MarshalIndent(jsonMap, " ", "  ")
 	return string(json)
 }
 
+// Checks if a directory contains any managed directories
 func HasManagedDirs(dir string, rpmDirs map[string]bool) bool {
 	for rpmDir := range rpmDirs {
 		if strings.HasPrefix(rpmDir, dir+"/") {
@@ -97,6 +102,7 @@ func HasManagedDirs(dir string, rpmDirs map[string]bool) bool {
 	return false
 }
 
+// Returns unmanaged files in a system.
 func FindUnmanagedFiles(rd func(dir string) ([]os.FileInfo, error), dir string, rpmFiles map[string]string, rpmDirs map[string]bool,
 	unmanagedFiles map[string]string, ignoreList map[string]bool) {
 	files, _ := rd(dir)
@@ -131,6 +137,7 @@ func FindUnmanagedFiles(rd func(dir string) ([]os.FileInfo, error), dir string, 
 	}
 }
 
+// Returns managed files and directories in a system.
 func GetManagedFiles() (map[string]string, map[string]bool) {
 	files := make(map[string]string)
 	dirs := make(map[string]bool)

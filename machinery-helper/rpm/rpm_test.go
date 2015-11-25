@@ -142,17 +142,17 @@ var _ = Describe("Rpm", func() {
 
 	Describe("AssembleJSON", func() {
 		var (
-			files_map map[string]string
-			json      string
+			filesMap map[string]string
+			json     string
 		)
 
 		JustBeforeEach(func() {
-			json = AssembleJSON(files_map)
+			json = AssembleJSON(filesMap)
 		})
 
 		Context("when parsing an unmanaged files map", func() {
 			BeforeEach(func() {
-				files_map = map[string]string{
+				filesMap = map[string]string{
 					"name": "/usr/share/go_rulez", "type": "file",
 				}
 
