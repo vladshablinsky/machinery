@@ -31,6 +31,7 @@ var remoteFileSystems = []string{"autofs", "cifs", "nfs", "nfs4"}
 var specialFileSystems = []string{"proc", "sysfs", "devtmpfs", "tmpfs", "rpc_pipefs", "fuse.gvfs-fuse-daemon"}
 var localFileSystems = []string{"ext2", "ext3", "ext4", "reiserfs", "btrfs", "vfat", "xfs", "jfs"}
 
+// Returns the existing mountpoints in a system.
 func ParseMounts() map[string]string {
 	mount, _ := ioutil.ReadFile(ProcMountsPath)
 	mounts := make(map[string]string)
