@@ -40,8 +40,8 @@ describe OsInspector do
 
       expect(os).to eq(
         OsOpenSuse13_1.new(
-          name: "openSUSE 13.1 (Bottle)",
-          version: "13.1 (Bottle)"
+          name: "openSUSE",
+          version: "13.1"
         )
       )
     end
@@ -54,7 +54,7 @@ describe OsInspector do
 
       expect(os).to be_an_instance_of(OsOpenSuseTumbleweed)
       expect(os.name).to eq("openSUSE Tumbleweed")
-      expect(os.version).to match(/[0-9]{8}/)
+      expect(os.version).to eq("20150421")
     end
 
     it "gets os info from RHEL7 os-release file" do
@@ -65,8 +65,8 @@ describe OsInspector do
 
       expect(os).to eq(
         OsUnknown.new(
-          name: "Red Hat Enterprise Linux Server 7.0 (Maipo)",
-          version: "7.0 (Maipo)"
+          name: "Red Hat Enterprise Linux Server",
+          version: "7.0"
         )
       )
     end
@@ -116,8 +116,8 @@ describe OsInspector do
 
       expect(description.os).to eq(
         OsOpenSuse13_1.new(
-          name: "openSUSE 13.1 (Bottle)",
-          version: "13.1 (Bottle)",
+          name: "openSUSE",
+          version: "13.1",
           architecture: "x86_64"
         )
       )
@@ -161,7 +161,7 @@ describe OsInspector do
       inspector.inspect(filter)
 
       expect(description.os.name).to eq "openSUSE Tumbleweed"
-      expect(description.os.version).to eq("20150421 (Tumbleweed)")
+      expect(description.os.version).to eq("20150421")
       expect(description.os.architecture).to eq "x86_64"
       expect(inspector.summary).to include("openSUSE Tumbleweed")
       expect(description.os).to be_a(OsOpenSuseTumbleweed)
@@ -190,10 +190,11 @@ describe OsInspector do
 
       inspector.inspect(filter)
 
-      expect(description.os.name).to eq "SUSE Linux Enterprise Server 11"
+      expect(description.os.name).to eq "SLES"
       expect(description.os.version).to eq("11 SP4")
       expect(description.os.architecture).to eq "x86_64"
-      expect(inspector.summary).to include("SUSE Linux Enterprise Server 11")
+      expect(inspector.summary).to include("SLES")
+      expect(inspector.summary).to include("11 SP4")
       expect(description.os).to be_a(OsSles11)
     end
 
