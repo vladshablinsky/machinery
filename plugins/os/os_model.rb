@@ -28,21 +28,21 @@ class Os < Machinery::Object
     end
   end
 
-  def self.for(os_name)
+  def self.for(os_pretty_name, os_name=nil)
     descendants.each do |os_class|
-      if os_name == os_class.canonical_name
+      if os_pretty_name == os_class.canonical_name
         os = os_class.new
-        os.name = os_name
+        os.name = os_name || os_pretty_name
         return os
       end
     end
-    if os_name.match(/SUSE Linux|openSUSE/)
+    if (os_pretty_name || os_name).match(/SUSE Linux|openSUSE/)
       os = OsSuse.new
-      os.name = os_name
+      os.name = os_name || os_pretty_name
       return os
     end
     os = OsUnknown.new
-    os.name = os_name
+    os.name = os_name || os_pretty_name
     os
   end
 

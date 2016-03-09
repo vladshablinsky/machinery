@@ -92,7 +92,7 @@ class OsInspector < Inspector
 
       # remove always changing Tumbleweed version from pretty name
       if result["pretty_name"] =~ /^openSUSE.*Tumbleweed/
-        result["pretty_name"] = "openSUSE Tumbleweed"
+        result["name"] = result["pretty_name"] = "openSUSE Tumbleweed"
       end
 
       # remove Leap version from pretty name
@@ -104,19 +104,13 @@ class OsInspector < Inspector
       # the results are different because SP4 has an os-release
       if result["pretty_name"] =~ /^SUSE Linux Enterprise Server 11 (SP\d)$/
         result["pretty_name"] = "SUSE Linux Enterprise Server 11"
-        result["version"] = "11 #{$1}"
+        result["version_id"] = "11 #{$1}"
       end
     end
     # return pretty_name as name as it contains the actual full length
     # name instead of an abbreviation
-    os = Os.for(result["pretty_name"] || result["name"])
-    os.version = result["version"]
-
-    # since Tumbleweed does no longer store the version number in the
-    # "version" property, we've to read from the "version_id" property
-    if os.version == "Tumbleweed"
-      os.version = result["version_id"]
-    end
+    os = Os.for(result["pretty_name"] || result["name"], result["name"])
+    os.version = result["version_id"]
 
     os
   end
